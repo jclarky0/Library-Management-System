@@ -1,19 +1,33 @@
 import React, { useState } from 'react';
 import { Box, TextField, Typography, Button, Paper } from '@mui/material';
-import { requestPasswordReset } from './apiService'; // Import the requestPasswordReset function
 import backgroundImage from './images/BG.jpg'; // Adjust the path if necessary
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
+  const [isError, setIsError] = useState(false);
 
   const handleRequestReset = async () => {
     try {
-      await requestPasswordReset(email);
-      setMessage('Password reset email sent');
+      // Send a PUT request with the email and new password
+      const response = await fetch(`http://localhost:8080/users/reset-password`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, newPassword: '123456' }), // JSON payload
+      });
+
+      if (response.ok) {
+        setMessage('Password reset successfully. Your new password is "123456".');
+        setIsError(false);
+      } else {
+        const errorData = await response.json();
+        setMessage(errorData.message || 'Error resetting password. Please try again.');
+        setIsError(true);
+      }
     } catch (error) {
       console.error('Error requesting password reset:', error);
-      setMessage('Error requesting password reset');
+      setMessage('An unexpected error occurred. Please try again.');
+      setIsError(true);
     }
   };
 
@@ -73,7 +87,12 @@ const ForgotPassword = () => {
           Reset Password
         </Button>
         {message && (
-          <Typography variant="body2" align="center" marginTop={2} color="error">
+          <Typography
+            variant="body2"
+            align="center"
+            marginTop={2}
+            color={isError ? 'error' : 'success'}
+          >
             {message}
           </Typography>
         )}

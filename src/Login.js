@@ -12,7 +12,7 @@ const Login = () => {
 
   const handleLogin = async () => {
     if (!username || !password) {
-      setError('Username/email and password must be provided');
+      setError('Username/Email & Password MUST BE PROVIDED');
       return;
     }
 
@@ -60,8 +60,8 @@ const Login = () => {
         elevation={6}
         sx={{
           padding: 2,
-          width: '295px',
-          height: '330px',
+          width: '300px',
+          height: '350px',
           backdropFilter: 'blur(10px)',
           backgroundColor: 'rgba(255, 255, 255, 0.8)',
         }}
@@ -73,7 +73,7 @@ const Login = () => {
           textAlign="center"
           sx={{ fontWeight: 'bold', marginTop: '20px' }}
         >
-          Login
+          LOGIN
         </Typography>
         {error && (
           <Typography variant="body2" color="error" align="center" gutterBottom>

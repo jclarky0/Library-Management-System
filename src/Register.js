@@ -12,12 +12,36 @@ const Register = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [error, setError] = useState('');
+  const [touched, setTouched] = useState(false); // Track if the user interacted with the form
 
-  const handleRegister = async (role) => {
+  // Validation function
+  const validateForm = () => {
+    if (!username || !email || !password || !confirmPassword) {
+      setError('All fields are required');
+      return false;
+    }
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(email)) {
+      setError('Invalid email format');
+      return false;
+    }
+    if (password.length < 6) {
+      setError('Password must be at least 6 characters');
+      return false;
+    }
     if (password !== confirmPassword) {
       setError('Passwords do not match');
+      return false;
+    }
+    return true;
+  };
+
+  const handleRegister = async (role) => {
+    setTouched(true); // Mark form as touched when user attempts to register
+    if (!validateForm()) {
       return;
     }
+
     const userData = { username, email, password, role, enabled: role === 2 ? false : true }; // Set enabled to false for librarian
     try {
       const response = await registerUser(userData);
@@ -39,6 +63,7 @@ const Register = () => {
     setPassword('');
     setConfirmPassword('');
     setError('');
+    setTouched(false); // Reset touched state
   };
 
   return (
@@ -61,7 +86,7 @@ const Register = () => {
         elevation={6}
         sx={{
           padding: 2,
-          width: '300px',
+          width: '400px',
           backdropFilter: 'blur(10px)',
           backgroundColor: 'rgba(255, 255, 255, 0.8)',
         }}
@@ -73,7 +98,7 @@ const Register = () => {
           textAlign="center"
           sx={{ fontWeight: 'bold', marginTop: '15px' }}
         >
-          Register
+          REGISTER
         </Typography>
         {error && (
           <Typography variant="body2" color="error" align="center" gutterBottom>
@@ -91,6 +116,8 @@ const Register = () => {
             setUsername(e.target.value);
             setError('');
           }}
+          error={touched && !username}
+          helperText={touched && !username ? 'Username is required' : ''}
         />
         <TextField
           label="Email"
@@ -103,6 +130,14 @@ const Register = () => {
             setEmail(e.target.value);
             setError('');
           }}
+          error={touched && (!email || !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email))}
+          helperText={
+            touched && !email
+              ? 'Email is required'
+              : touched && !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)
+              ? 'Invalid email format'
+              : ''
+          }
         />
         <TextField
           label="Password"
@@ -116,6 +151,8 @@ const Register = () => {
             setPassword(e.target.value);
             setError('');
           }}
+          error={touched && password.length < 6}
+          helperText={touched && password.length < 6 ? 'Password must be at least 6 characters' : ''}
         />
         <TextField
           label="Confirm Password"
@@ -129,6 +166,8 @@ const Register = () => {
             setConfirmPassword(e.target.value);
             setError('');
           }}
+          error={touched && password !== confirmPassword}
+          helperText={touched && password !== confirmPassword ? 'Passwords do not match' : ''}
         />
         <Button
           variant="contained"

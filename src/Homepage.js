@@ -25,6 +25,13 @@ const Homepage = () => {
       navigate('/login', { state: { role } });
     }
   };
+  
+  const handleMenuAdmin = (role) => {
+    setAnchorEl(null);
+    if (role) {
+      navigate('/AdminDashboard', { state: { role } });
+    }
+  };
 
   const handleLMSClick = () => {
     window.location.reload();
@@ -36,6 +43,8 @@ const Homepage = () => {
   const handleRegisterClick = () => {
     navigate('/register');
   };
+
+  
 
   return (
     <Box
@@ -104,6 +113,8 @@ const Homepage = () => {
             >
               <MenuItem onClick={() => handleMenuClose('student')}>Student</MenuItem>
               <MenuItem onClick={() => handleMenuClose('librarian')}>Librarian</MenuItem>
+              <MenuItem onClick={() => handleMenuAdmin('admin')}>Admin</MenuItem>
+
             </Menu>
           </div>
         </Toolbar>
@@ -146,6 +157,7 @@ const Homepage = () => {
           <Button variant="contained" color="primary" size="large" onClick={handleLoginClick}>
             Login
           </Button>
+          
         </Box>
       </Box>
     </Box>
