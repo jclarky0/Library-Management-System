@@ -5,6 +5,12 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import AccountCircle from '@mui/icons-material/AccountCircle';
+import BookIcon from '@mui/icons-material/Book';
+import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
+import ConstructionTwoToneIcon from '@mui/icons-material/ConstructionTwoTone';
+import ComputerIcon from '@mui/icons-material/Computer';
+import ElectricBoltTwoToneIcon from '@mui/icons-material/ElectricBoltTwoTone';
+import BusinessCenterTwoToneIcon from '@mui/icons-material/BusinessCenterTwoTone';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -157,7 +163,7 @@ const StudDashboard = () => {
                 horizontal: 'right',
               }}
             >
-              <MenuItem onClick={handleMenuClose}>Personal Information</MenuItem>
+              <MenuItem onClick={() => navigate('/personalinfo')}>Personal Information</MenuItem>
               <MenuItem onClick={() => navigate('/BorrowList')}>Borrowed Book</MenuItem>
               <MenuItem onClick={handleLogout}>Logout</MenuItem>
             </Menu>
@@ -165,12 +171,12 @@ const StudDashboard = () => {
         </Toolbar>
       </AppBar>
       <Box sx={{ display: 'flex', justifyContent: 'center', padding: 2, marginTop: 8 }}>
-        <Button variant="text" sx={{ margin: 1 }} onClick={() => handleCategoryClick('All')}>All Books</Button>
-        <Button variant="text" sx={{ margin: 1 }} onClick={() => handleCategoryClick('Nursing')}>Nursing</Button>
-        <Button variant="text" sx={{ margin: 1 }} onClick={() => handleCategoryClick('IT')}>IT</Button>
-        <Button variant="text" sx={{ margin: 1 }} onClick={() => handleCategoryClick('Civil Engineer')}>Civil Engineer</Button>
-        <Button variant="text" sx={{ margin: 1 }} onClick={() => handleCategoryClick('Electrical Engineering')}>Electrical Engineering</Button>
-        <Button variant="text" sx={{ margin: 1 }} onClick={() => handleCategoryClick('Business Administration')}>Business Administration</Button>
+        <Button variant="outlined" sx={{ margin: 1 }} onClick={() => handleCategoryClick('All')}><BookIcon/>All Books</Button>
+        <Button variant="outlined" sx={{ margin: 1 }} onClick={() => handleCategoryClick('Nursing')}><LocalHospitalIcon/>Nursing</Button>
+        <Button variant="outlined" sx={{ margin: 1 }} onClick={() => handleCategoryClick('IT')}><ComputerIcon/> IT</Button>
+        <Button variant="outlined" sx={{ margin: 1 }} onClick={() => handleCategoryClick('Civil Engineer')}><ConstructionTwoToneIcon/>Civil Engineer</Button>
+        <Button variant="outlined" sx={{ margin: 1 }} onClick={() => handleCategoryClick('Electrical Engineering')}><ElectricBoltTwoToneIcon/>Electrical Engineering</Button>
+        <Button variant="outlined" sx={{ margin: 1 }} onClick={() => handleCategoryClick('Business Administration')}><BusinessCenterTwoToneIcon/>Business Administration</Button>
       </Box>
       <Box sx={{ display: 'flex', justifyContent: 'center', padding: 2 }}>
         <TextField

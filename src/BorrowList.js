@@ -20,6 +20,12 @@ const BorrowList = () => {
     setAnchorEl(event.currentTarget);
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('email');
+    localStorage.removeItem('username');
+    navigate('/');
+  };
+  
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
@@ -117,7 +123,7 @@ const BorrowList = () => {
           >
             <MenuItem onClick={handlePersonalInfoClick}>Personal Information</MenuItem>
             <MenuItem onClick={() => navigate('/borrowlist')}>Borrowed Book</MenuItem>
-            <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
+            <MenuItem onClick={handleLogout}>Logout</MenuItem>
           </Menu>
         </Toolbar>
       </AppBar>

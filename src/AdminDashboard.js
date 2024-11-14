@@ -359,8 +359,8 @@ const AdminDashboard = () => {
                     )}
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleEditDialogClose}>Cancel</Button>
-                    <Button onClick={handleEditFormSubmit} color="primary">Save</Button>
+                    <Button onClick={handleEditFormSubmit} color="primary" variant="contained">Save</Button>
+                    <Button onClick={handleEditDialogClose} variant="outlined">Cancel</Button>
                 </DialogActions>
             </Dialog>
 
@@ -375,8 +375,8 @@ const AdminDashboard = () => {
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={closeDeleteDialog}>Cancel</Button>
-                    <Button onClick={() => handleDelete(userToDelete.id)} color="primary">Delete</Button>
+                    <Button onClick={() => handleDelete(userToDelete.id)} color="primary" variant="contained">Delete</Button>
+                    <Button onClick={closeDeleteDialog} variant="outlined">Cancel</Button>
                 </DialogActions>
             </Dialog>
         </Box>

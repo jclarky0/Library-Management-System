@@ -15,7 +15,7 @@ import RequestPageIcon from '@mui/icons-material/RequestPage'; // Import the Req
 const drawerWidth = 240;
 
 const books = [
-  { id: 'IT-321', name: "Junrey's Journey", author: 'Junrey Wagwag', category: 'Adventure' },
+  { id: 'IT-321', name: "John Doe", author: 'John Doe', category: 'Adventure' },
   // Add other books here...
 ];
 

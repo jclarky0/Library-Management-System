@@ -214,12 +214,12 @@ const ReservationBooks = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {['21-1233-122', '21-1233-122', '21-1233-122', '21-1233-122', '21-1233-122'].map((id, index) => (
+                {['21-1233-122'].map((id, index) => (
                   <TableRow key={index}>
                     <TableCell>{id}</TableCell>
-                    <TableCell>Junrey Wagwag</TableCell>
+                    <TableCell>John Doe</TableCell>
                     <TableCell>21</TableCell>
-                    <TableCell>July 22, 2002</TableCell>
+                    <TableCell>November 1 2003</TableCell>
                     <TableCell>
                       <IconButton
                         aria-controls="table-menu"
