@@ -4,13 +4,15 @@ import {
   List, ListItem, ListItemIcon, ListItemText, CssBaseline, Drawer, IconButton,
   Menu, MenuItem, Select, InputLabel, FormControl
 } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import PersonIcon from '@mui/icons-material/Person';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import RestoreIcon from '@mui/icons-material/Restore';
 import AccountCircle from '@mui/icons-material/AccountCircle';
+import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
+import RequestPageIcon from '@mui/icons-material/RequestPage';
 
 const drawerWidth = 240;
 
@@ -24,6 +26,7 @@ const AddBook = () => {
     quantity: '',
     deweyDecimal: ''
   });
+
   const [photo, setPhoto] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -37,7 +40,9 @@ const AddBook = () => {
   };
 
   const handlePhotoChange = (e) => {
-    setPhoto(e.target.files[0]);
+    if (e.target.files && e.target.files[0]) {
+      setPhoto(e.target.files[0]);
+    }
   };
 
   const handleSubmit = (e) => {
@@ -49,7 +54,9 @@ const AddBook = () => {
     formData.append('category', book.category);
     formData.append('quantity', book.quantity);
     formData.append('deweyDecimal', book.deweyDecimal);
-    formData.append('photo', photo);
+    if (photo) {
+      formData.append('photo', photo);
+    }
   
     fetch('http://localhost:8080/books', {
       method: 'POST',
@@ -146,35 +153,47 @@ const AddBook = () => {
         <Toolbar />
         <Divider />
         <List>
-          <ListItem button onClick={() => handleMenuClick('/librariandashboard')}>
+          <ListItem button component={Link} to="/LibrarianDashboard">
             <ListItemIcon>
               <AssignmentIcon />
             </ListItemIcon>
             <ListItemText primary="Dashboard" />
           </ListItem>
-          <ListItem button onClick={() => handleMenuClick('/AddBook')}>
+          <ListItem button component={Link} to="/AddBookList">
             <ListItemIcon>
               <AddBoxIcon />
             </ListItemIcon>
-            <ListItemText primary="Add Book Stock" />
+            <ListItemText primary="Manage Books" />
           </ListItem>
-          <ListItem button onClick={() => handleMenuClick('/restricted-student')}>
+          <ListItem button component={Link} to="/RestrictedAccount">
             <ListItemIcon>
               <PersonIcon />
             </ListItemIcon>
             <ListItemText primary="Restricted Student" />
           </ListItem>
-          <ListItem button onClick={() => handleMenuClick('/issue-books')}>
+          <ListItem button component={Link} to="/ReservationBooks">
             <ListItemIcon>
               <MenuBookIcon />
             </ListItemIcon>
-            <ListItemText primary="Issue Books" />
+            <ListItemText primary="Reservation Books" />
           </ListItem>
-          <ListItem button onClick={() => handleMenuClick('/return-books')}>
+          <ListItem button component={Link} to="/ReturnBooks">
             <ListItemIcon>
               <RestoreIcon />
             </ListItemIcon>
             <ListItemText primary="Return Books" />
+          </ListItem>
+          <ListItem button component={Link} to="/IssueBooks">
+            <ListItemIcon>
+              <LibraryBooksIcon />
+            </ListItemIcon>
+            <ListItemText primary="Issue Books" />
+          </ListItem>
+          <ListItem button component={Link} to="/RequestedBooks">
+            <ListItemIcon>
+            <RequestPageIcon />
+            </ListItemIcon>
+            <ListItemText primary="Requested Books" />
           </ListItem>
         </List>
       </Drawer>
@@ -274,25 +293,48 @@ const AddBook = () => {
                 onChange={handleChange}
                 inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
               />
-              <Button
-                variant="contained"
-                component="label"
-                fullWidth
-                sx={{ mt: 3, mb: 2 }}
-              >
-                Upload Photo
-                <input
-                  type="file"
-                  hidden
-                  accept="image/*"
-                  onChange={handlePhotoChange}
-                />
-              </Button>
+
+              {!photo ? (
+                <Button
+                  variant="contained"
+                  component="label"
+                  fullWidth
+                  sx={{ mt: 3, mb: 2 }}
+                >
+                  Upload Photo
+                  <input
+                    type="file"
+                    hidden
+                    accept="image/*"
+                    onChange={handlePhotoChange}
+                  />
+                </Button>
+              ) : (
+                <Box sx={{ display: 'flex', alignItems: 'center', mt: 3, mb: 2 }}>
+                  <Typography variant="body1" sx={{ flexGrow: 1 }}>
+                    {photo.name}
+                  </Typography>
+                  <Button 
+                    variant="contained"
+                    component="label"
+                    sx={{ ml: 2 }}
+                  >
+                    Change
+                    <input
+                      type="file"
+                      hidden
+                      accept="image/*"
+                      onChange={handlePhotoChange}
+                    />
+                  </Button>
+                </Box>
+              )}
               <Button
                 type="submit"
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
+                disabled={!photo} // Disable if no photo is uploaded
               >
                 Submit
               </Button>

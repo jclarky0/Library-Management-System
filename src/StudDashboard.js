@@ -133,7 +133,7 @@ const StudDashboard = () => {
               style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}
             >
               <Typography variant="h6" component="div" sx={{ fontWeight: 'bold', color: 'white' }}>
-                LMS
+                Library Management System
               </Typography>
             </div>
           </div>
@@ -224,11 +224,11 @@ const StudDashboard = () => {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleDialogClose} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleConfirmBorrow} color="primary">
+          <Button onClick={handleConfirmBorrow} color="primary" variant="contained">
             Confirm
+          </Button>
+          <Button onClick={handleDialogClose} color="primary" variant="outlined">
+            Cancel
           </Button>
         </DialogActions>
       </Dialog>

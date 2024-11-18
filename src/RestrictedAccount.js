@@ -266,8 +266,8 @@ const RestrictedAccount = () => {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => handleDialogClose(true)} color="primary">Yes</Button>
-          <Button onClick={() => handleDialogClose(false)} color="primary" autoFocus>No</Button>
+          <Button onClick={() => handleDialogClose(true)} color="primary" variant="contained">Yes</Button>
+          <Button onClick={() => handleDialogClose(false)} color="primary" variant="outlined" autoFocus>No</Button>
         </DialogActions>
       </Dialog>
     </Box>

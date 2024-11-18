@@ -77,7 +77,7 @@ const Homepage = () => {
               style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}
             >
               <Typography variant="h6" component="div" sx={{ fontWeight: 'bold', color: 'white' }}>
-                LMS
+                Library Management System
               </Typography>
             </div>
           </div>

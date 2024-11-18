@@ -22,8 +22,7 @@ const books = [
 const LibrarianDashboard = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const email = location.state?.username || 'Librarian';
-  const partialName = email.split(' ')[0];
+  const username = location.state?.username;
 
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -58,7 +57,7 @@ const LibrarianDashboard = () => {
             Library Management System
           </Typography>
           <Typography variant="body1" component="div" sx={{ marginRight: 2 }}>
-            {partialName}
+            {username}
           </Typography>
           <div>
             <IconButton
@@ -106,7 +105,7 @@ const LibrarianDashboard = () => {
         <Toolbar />
         <Divider />
         <List>
-          <ListItem button component={Link} to="/LibrarianDashboard">
+          <ListItem button component={Link} to="/librariandashboard">
             <ListItemIcon>
               <AssignmentIcon />
             </ListItemIcon>
