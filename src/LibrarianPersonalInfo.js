@@ -10,8 +10,8 @@ const LibrarianPersonalInfo = () => {
   const location = useLocation();
   const [anchorEl, setAnchorEl] = useState(null);
   const [userInfo, setUserInfo] = useState({
-    username: '',
-    email: '',
+    username: 'username',
+    email: 'email',
   });
   
   const username = location.state?.username || localStorage.getItem('username');
