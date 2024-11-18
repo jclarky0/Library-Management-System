@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, AppBar, Toolbar, IconButton, Menu, MenuItem, Drawer, List, ListItem, ListItemIcon, ListItemText, Divider, CssBaseline } from '@mui/material';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
@@ -18,6 +18,25 @@ const IssueBooks = () => {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
   const [requests, setRequests] = useState([]);
+  const location = useLocation();
+
+  const username = location.state?.username || localStorage.getItem('username');
+
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8080/users${username}`);
+        const { username, email } = response.data;
+
+      } catch (error) {
+        console.error('Error fetching user info:', error);
+      }
+    };
+
+    if (username && username !== 'Guest') {
+      fetchUserInfo();
+    }
+  }, [username]);
  
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -32,7 +51,7 @@ const IssueBooks = () => {
   };
  
   const handlePersonalInfoClick = () => {
-    navigate('/personalinfo'); // Navigate to PersonalInfo page
+    navigate('/LibrarianPersonalInfo'); // Navigate to PersonalInfo page
   };
  
   useEffect(() => {
@@ -57,7 +76,7 @@ const IssueBooks = () => {
             Library Management System
           </Typography>
           <Typography variant="body1" component="div" sx={{ marginRight: 2 }}>
-            Librarian
+            {username}
           </Typography>
           <IconButton
             edge="end"

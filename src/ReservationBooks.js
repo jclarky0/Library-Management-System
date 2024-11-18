@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Container, AppBar, Toolbar, Divider, List, ListItem, ListItemIcon, ListItemText, CssBaseline, Drawer, IconButton, Menu, MenuItem, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation} from 'react-router-dom';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import PersonIcon from '@mui/icons-material/Person';
@@ -11,6 +11,7 @@ import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
+import axios from 'axios';
  
 const drawerWidth = 240;
  
@@ -23,6 +24,26 @@ const ReservationBooks = () => {
   const [borrowDate, setBorrowDate] = useState(null);
   const [returnDate, setReturnDate] = useState(null);
   const [denyDialogOpen, setDenyDialogOpen] = useState(false); // State for deny confirmation dialog
+  const location = useLocation();
+
+  const username = location.state?.username || localStorage.getItem('username');
+
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8080/users${username}`);
+        const { username, email } = response.data;
+
+      } catch (error) {
+        console.error('Error fetching user info:', error);
+      }
+    };
+
+    if (username && username !== 'Guest') {
+      fetchUserInfo();
+    }
+  }, [username]);
+
  
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -95,10 +116,10 @@ const ReservationBooks = () => {
           <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
             Library Management System
           </Typography>
+          <Typography variant="body1" component="div" sx={{ marginRight: 2 }}>
+            {username}
+          </Typography>
           <div>
-            <Typography variant="h6" noWrap component="div" sx={{ display: 'inline', marginRight: '8px' }}>
-              Librarian
-            </Typography>
             <IconButton
               edge="end"
               aria-label="account of current user"

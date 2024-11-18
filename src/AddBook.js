@@ -1,16 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box, TextField, Button, Typography, Container, AppBar, Toolbar, Divider,
   List, ListItem, ListItemIcon, ListItemText, CssBaseline, Drawer, IconButton,
   Menu, MenuItem, Select, InputLabel, FormControl
 } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import PersonIcon from '@mui/icons-material/Person';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import RestoreIcon from '@mui/icons-material/Restore';
 import AccountCircle from '@mui/icons-material/AccountCircle';
+import axios from 'axios';
 
 const drawerWidth = 240;
 
@@ -26,6 +27,25 @@ const AddBook = () => {
   });
   const [photo, setPhoto] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
+  const location = useLocation();
+
+  const username = location.state?.username || localStorage.getItem('username');
+
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8080/users${username}`);
+        const { username, email } = response.data;
+
+      } catch (error) {
+        console.error('Error fetching user info:', error);
+      }
+    };
+
+    if (username && username !== 'Guest') {
+      fetchUserInfo();
+    }
+  }, [username]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -95,6 +115,9 @@ const AddBook = () => {
           <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
             Library Management System
           </Typography>
+          <Typography variant="body1" component="div" sx={{ marginRight: 2 }}>
+            {username}
+          </Typography>
           <div>
             <IconButton
               edge="end"
@@ -146,7 +169,7 @@ const AddBook = () => {
         <Toolbar />
         <Divider />
         <List>
-          <ListItem button onClick={() => handleMenuClick('/librariandashboard')}>
+          <ListItem button onClick={() => handleMenuClick('/LibrarianDashboard')}>
             <ListItemIcon>
               <AssignmentIcon />
             </ListItemIcon>
@@ -158,19 +181,19 @@ const AddBook = () => {
             </ListItemIcon>
             <ListItemText primary="Add Book Stock" />
           </ListItem>
-          <ListItem button onClick={() => handleMenuClick('/restricted-student')}>
+          <ListItem button onClick={() => handleMenuClick('/RestrictedAccount')}>
             <ListItemIcon>
               <PersonIcon />
             </ListItemIcon>
             <ListItemText primary="Restricted Student" />
           </ListItem>
-          <ListItem button onClick={() => handleMenuClick('/issue-books')}>
+          <ListItem button onClick={() => handleMenuClick('/issueBooks')}>
             <ListItemIcon>
               <MenuBookIcon />
             </ListItemIcon>
             <ListItemText primary="Issue Books" />
           </ListItem>
-          <ListItem button onClick={() => handleMenuClick('/return-books')}>
+          <ListItem button onClick={() => handleMenuClick('/ReturnBooks')}>
             <ListItemIcon>
               <RestoreIcon />
             </ListItemIcon>

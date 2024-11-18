@@ -14,7 +14,7 @@ const LibrarianPersonalInfo = () => {
     email: '',
   });
   
-  const username = location.state?.username || localStorage.getItem('username') || 'Guest';
+  const username = location.state?.username || localStorage.getItem('username');
 
   useEffect(() => {
     const fetchUserInfo = async () => {
