@@ -26,7 +26,7 @@ const Login = () => {
       localStorage.setItem('username', username); // Set username in localStorage
 
       if (role === 2) {
-        navigate('/librariandashboard', { state: { username } });
+        navigate('/LibrarianDashboard', { state: { username } });
       } else {
         navigate('/studdashboard', { state: { username } });
       }

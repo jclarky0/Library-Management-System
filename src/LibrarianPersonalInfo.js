@@ -9,32 +9,33 @@ const LibrarianPersonalInfo = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [anchorEl, setAnchorEl] = useState(null);
-  const [userInfo, setUserInfo] = useState({
-    username: '',
-    email: '',
-  });
-  
-  const username = location.state?.username || localStorage.getItem('username') || 'Guest';
+  const [userInfo, setUserInfo] = useState({ username: '', email: '' });
+  const [error, setError] = useState(null);
+
+  const user = location.state?.username || localStorage.getItem('username');
 
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/users${username}`);
-        const { username, email } = response.data;
-
-        setUserInfo({
-          username,
-          email,
+        const response = await axios.get('http://localhost:8080/users', {
+          withCredentials: true, 
         });
-      } catch (error) {
-        console.error('Error fetching user info:', error);
+  
+        console.log(response.data); // Log the response data
+        if (response.data) {
+          const { username, email } = response.data; // Destructure
+          setUserInfo({ username, email });
+        } else {
+          setError('User data not found');
+        }
+      } catch (err) {
+        console.error('Error fetching user info:', err);
+        setError('Failed to load user information.');
       }
     };
-
-    if (username && username !== 'Guest') {
-      fetchUserInfo();
-    }
-  }, [username]);
+  
+    fetchUserInfo();
+  }, []);
 
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -77,7 +78,7 @@ const LibrarianPersonalInfo = () => {
             Library Management System
           </Typography>
           <Typography variant="body1" component="div" sx={{ color: 'white', marginRight: 2 }}>
-            {username}
+            {user}
           </Typography>
           <IconButton
             size="large"
@@ -114,7 +115,7 @@ const LibrarianPersonalInfo = () => {
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <Typography variant="body1" component="div" sx={{ marginBottom: 1, fontSize: '0.875rem' }}>
             <strong>Username:</strong> {userInfo.username}
-          </Typography>
+          </Typography> 
           <Typography variant="body1" component="div" sx={{ marginBottom: 1, fontSize: '0.875rem' }}>
             <strong>Email:</strong> {userInfo.email}
           </Typography>

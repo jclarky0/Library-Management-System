@@ -22,8 +22,6 @@ const RestrictedAccount = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const email = location.state?.username || 'Librarian';
-  const partialName = email.split(' ')[0];
-
   const [anchorEl, setAnchorEl] = useState(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogContent, setDialogContent] = useState('');
@@ -39,6 +37,25 @@ const RestrictedAccount = () => {
         console.error('Error fetching restricted accounts:', error);
       });
   }, []);
+
+  const username = location.state?.username || localStorage.getItem('username');
+
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8080/users${username}`);
+        const { username, email } = response.data;
+
+      } catch (error) {
+        console.error('Error fetching user info:', error);
+      }
+    };
+
+    if (username && username !== 'Guest') {
+      fetchUserInfo();
+    }
+  }, [username]);
+
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -113,7 +130,7 @@ const RestrictedAccount = () => {
             Library Management System
           </Typography>
           <Typography variant="body1" component="div" sx={{ marginRight: 2 }}>
-            {partialName}
+            {username}
           </Typography>
           <div>
             <IconButton

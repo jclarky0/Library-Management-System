@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AppBar, Toolbar, Typography, Box, Drawer, List, ListItem, ListItemIcon, ListItemText, CssBaseline, Divider, Menu, MenuItem, IconButton, Button } from '@mui/material';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
@@ -10,7 +10,8 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { DataGrid } from '@mui/x-data-grid';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
-import RequestPageIcon from '@mui/icons-material/RequestPage'; // Import the RequestPageIcon
+import RequestPageIcon from '@mui/icons-material/RequestPage';
+import axios from 'axios';
 
 const drawerWidth = 240;
 
@@ -25,6 +26,26 @@ const LibrarianDashboard = () => {
   const username = location.state?.username;
 
   const [anchorEl, setAnchorEl] = useState(null);
+  
+  
+  const username = location.state?.username || localStorage.getItem('username');
+
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8080/users${username}`);
+        const { username, email } = response.data;
+
+      } catch (error) {
+        console.error('Error fetching user info:', error);
+      }
+    };
+
+    if (username && username !== 'Guest') {
+      fetchUserInfo();
+    }
+  }, [username]);
+
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -49,6 +70,8 @@ const LibrarianDashboard = () => {
   };
 
   return (
+
+    
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
       <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>

@@ -30,6 +30,7 @@ const AddBookList = () => {
   const [updateConfirmOpen, setUpdateConfirmOpen] = useState(false);
   const [bookToDelete, setBookToDelete] = useState(null);
   const [bookToUpdate, setBookToUpdate] = useState(null);
+  const location = useLocation();
 
   useEffect(() => {
     fetchBooks();
@@ -44,6 +45,24 @@ const AddBookList = () => {
         console.error('Error fetching books:', error);
       });
   };
+
+  const username = location.state?.username || localStorage.getItem('username');
+
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8080/users${username}`);
+        const { username, email } = response.data;
+
+      } catch (error) {
+        console.error('Error fetching user info:', error);
+      }
+    };
+
+    if (username && username !== 'Guest') {
+      fetchUserInfo();
+    }
+  }, [username]);
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -186,6 +205,9 @@ const AddBookList = () => {
         <Toolbar style={{ backgroundColor: theme.palette.primary.main }}>
           <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
             Library Management System
+          </Typography>
+          <Typography variant="body1" component="div" sx={{ marginRight: 2 }}>
+            {username}
           </Typography>
           <div>
             <IconButton

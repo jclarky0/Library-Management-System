@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box, TextField, Button, Typography, Container, AppBar, Toolbar, Divider,
   List, ListItem, ListItemIcon, ListItemText, CssBaseline, Drawer, IconButton,
@@ -29,6 +29,25 @@ const AddBook = () => {
 
   const [photo, setPhoto] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
+  const location = useLocation();
+
+  const username = location.state?.username || localStorage.getItem('username');
+
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8080/users${username}`);
+        const { username, email } = response.data;
+
+      } catch (error) {
+        console.error('Error fetching user info:', error);
+      }
+    };
+
+    if (username && username !== 'Guest') {
+      fetchUserInfo();
+    }
+  }, [username]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -101,6 +120,9 @@ const AddBook = () => {
         <Toolbar style={{ backgroundColor: '87CEFA' }}>
           <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
             Library Management System
+          </Typography>
+          <Typography variant="body1" component="div" sx={{ marginRight: 2 }}>
+            {username}
           </Typography>
           <div>
             <IconButton
