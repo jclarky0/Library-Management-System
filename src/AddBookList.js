@@ -322,7 +322,6 @@ const AddBookList = () => {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell sx={{ fontWeight: 'bold' }}>ID</TableCell>
                   <TableCell sx={{ fontWeight: 'bold' }}>Title</TableCell>
                   <TableCell sx={{ fontWeight: 'bold' }}>Author</TableCell>
                   <TableCell sx={{ fontWeight: 'bold' }}>ISBN</TableCell>
@@ -337,7 +336,6 @@ const AddBookList = () => {
                 {Array.isArray(books) && books.length > 0 ? (
                   books.map((book) => (
                     <TableRow key={book.id}>
-                      <TableCell>{book.id}</TableCell>
                       <TableCell>{editingBookId === book.id ? (
                         <TextField
                           name="title"

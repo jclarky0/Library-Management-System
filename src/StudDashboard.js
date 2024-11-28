@@ -11,6 +11,7 @@ import ConstructionTwoToneIcon from '@mui/icons-material/ConstructionTwoTone';
 import ComputerIcon from '@mui/icons-material/Computer';
 import ElectricBoltTwoToneIcon from '@mui/icons-material/ElectricBoltTwoTone';
 import BusinessCenterTwoToneIcon from '@mui/icons-material/BusinessCenterTwoTone';
+import MiscellaneousServicesIcon from '@mui/icons-material/MiscellaneousServices';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -128,14 +129,9 @@ const StudDashboard = () => {
       <AppBar>
         <Toolbar style={{ backgroundColor: '87CEFA', minHeight: 50 }}>
           <div style={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
-            <div
-              onClick={() => handleCategoryClick('All')}
-              style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}
-            >
               <Typography variant="h6" component="div" sx={{ fontWeight: 'bold', color: 'white' }}>
                 Library Management System
               </Typography>
-            </div>
           </div>
  
           <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -174,9 +170,10 @@ const StudDashboard = () => {
         <Button variant="outlined" sx={{ margin: 1 }} onClick={() => handleCategoryClick('All')}><BookIcon/>All Books</Button>
         <Button variant="outlined" sx={{ margin: 1 }} onClick={() => handleCategoryClick('Nursing')}><LocalHospitalIcon/>Nursing</Button>
         <Button variant="outlined" sx={{ margin: 1 }} onClick={() => handleCategoryClick('IT')}><ComputerIcon/> IT</Button>
-        <Button variant="outlined" sx={{ margin: 1 }} onClick={() => handleCategoryClick('Civil Engineer')}><ConstructionTwoToneIcon/>Civil Engineer</Button>
+        <Button variant="outlined" sx={{ margin: 1 }} onClick={() => handleCategoryClick('Civil Engineering')}><ConstructionTwoToneIcon/>Civil Engineer</Button>
         <Button variant="outlined" sx={{ margin: 1 }} onClick={() => handleCategoryClick('Electrical Engineering')}><ElectricBoltTwoToneIcon/>Electrical Engineering</Button>
         <Button variant="outlined" sx={{ margin: 1 }} onClick={() => handleCategoryClick('Business Administration')}><BusinessCenterTwoToneIcon/>Business Administration</Button>
+        <Button variant="outlined" sx={{ margin: 1 }} onClick={() => handleCategoryClick('Others')}><MiscellaneousServicesIcon/>Others</Button>
       </Box>
       <Box sx={{ display: 'flex', justifyContent: 'center', padding: 2 }}>
         <TextField

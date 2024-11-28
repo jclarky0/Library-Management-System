@@ -197,7 +197,7 @@ const LibrarianDashboard = () => {
                 <CardMedia
                   component="img"
                   height="140"
-                  image={book.photo}
+                  image={book.photo ? `data:image/jpeg;base64,${book.photo}` : 'placeholder-image-url'}
                 />
                 <CardContent>
                   <Typography variant="h6" component="div" sx={{

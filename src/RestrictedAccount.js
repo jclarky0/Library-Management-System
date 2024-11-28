@@ -239,7 +239,6 @@ const RestrictedAccount = () => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>ID</TableCell>
                 <TableCell>Username</TableCell>
                 <TableCell>Email</TableCell>
                 <TableCell>Status</TableCell>
@@ -249,7 +248,6 @@ const RestrictedAccount = () => {
             <TableBody>
               {restrictedAccounts.map((account) => (
                 <TableRow key={account.id}>
-                  <TableCell>{account.id}</TableCell>
                   <TableCell>{account.username}</TableCell>
                   <TableCell>{account.email}</TableCell>
                   <TableCell>{account.status}</TableCell>

@@ -64,7 +64,7 @@ const PersonalInfo = () => {
             <ArrowBackIcon />
           </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            LMS
+            Library Management System
           </Typography>
           <Typography variant="body1" component="div" sx={{ color: 'white', marginRight: 2 }}>
             {username}
