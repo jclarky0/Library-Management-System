@@ -175,7 +175,6 @@ const ReturnBooks = () => {
             <Table sx={{ minWidth: 650 }} aria-label="returned books table">
               <TableHead>
                 <TableRow>
-                  <TableCell>ID</TableCell>
                   <TableCell>Student Name</TableCell>
                   <TableCell>Title</TableCell>
                   <TableCell>Borrow Date</TableCell>
@@ -186,7 +185,6 @@ const ReturnBooks = () => {
               <TableBody>
                 {requests.map((request) => (
                   <TableRow key={request.id}>
-                    <TableCell>{request.id}</TableCell>
                     <TableCell>{request.user.username}</TableCell>
                     <TableCell>{request.bookTitle}</TableCell>
                     <TableCell>{request.borrowDate ? new Date(request.borrowDate).toLocaleDateString() : 'N/A'}</TableCell>

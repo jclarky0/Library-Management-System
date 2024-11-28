@@ -95,7 +95,7 @@ const BorrowList = () => {
             <ArrowBackIcon />
           </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            LMS
+            Library Management System
           </Typography>
           <Typography variant="body1" component="div" sx={{ color: 'white', marginRight: 2 }}>
             {localStorage.getItem('username')}
@@ -172,7 +172,6 @@ const BorrowList = () => {
           <Table sx={{ minWidth: 650 }} aria-label="borrowed books table">
             <TableHead>
               <TableRow>
-                <TableCell>ID</TableCell>
                 <TableCell>Title</TableCell>
                 <TableCell>Borrow and Return Timeline</TableCell>
                 <TableCell>Status</TableCell>
@@ -182,7 +181,6 @@ const BorrowList = () => {
             <TableBody>
               {filteredBooks.map((book) => (
                 <TableRow key={book.id}>
-                  <TableCell>{book.id}</TableCell>
                   <TableCell>{book.bookTitle}</TableCell>
                   <TableCell>
                     {book.borrowDate ? `${new Date(book.borrowDate).toLocaleDateString()} - ${new Date(book.returnDate).toLocaleDateString()}` : 'N/A'}
