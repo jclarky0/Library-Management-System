@@ -1,13 +1,30 @@
 import React, { useState, useEffect } from 'react';
-import { AppBar, Toolbar, Typography, Box, Drawer, List, ListItem, ListItemIcon, ListItemText, CssBaseline, Divider, Menu, MenuItem, IconButton, Button } from '@mui/material';
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Box,
+  Drawer,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  CssBaseline,
+  Divider,
+  Menu,
+  MenuItem,
+  IconButton,
+  Card,
+  CardContent,
+  CardMedia,
+  Grid,
+} from '@mui/material';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import PersonIcon from '@mui/icons-material/Person';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import RestoreIcon from '@mui/icons-material/Restore';
-import LogoutIcon from '@mui/icons-material/Logout';
-import { DataGrid } from '@mui/x-data-grid';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 import RequestPageIcon from '@mui/icons-material/RequestPage';
@@ -15,37 +32,26 @@ import axios from 'axios';
 
 const drawerWidth = 240;
 
-const books = [
-  { id: 'IT-321', name: "John Doe", author: 'John Doe', category: 'Adventure' },
-  // Add other books here...
-];
-
 const LibrarianDashboard = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const username = location.state?.username;
-
   const [anchorEl, setAnchorEl] = useState(null);
-  
-  
+  const [books, setBooks] = useState([]);
   const username = location.state?.username || localStorage.getItem('username');
 
+  // Fetch books from the backend
   useEffect(() => {
-    const fetchUserInfo = async () => {
+    const fetchBooks = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/users${username}`);
-        const { username, email } = response.data;
-
+        const response = await axios.get('http://localhost:8080/books');
+        setBooks(response.data);
       } catch (error) {
-        console.error('Error fetching user info:', error);
+        console.error('Error fetching books:', error);
       }
     };
 
-    if (username && username !== 'Guest') {
-      fetchUserInfo();
-    }
-  }, [username]);
-
+    fetchBooks();
+  }, []);
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -65,13 +71,7 @@ const LibrarianDashboard = () => {
     handleClose();
   };
 
-  const handleMenuClick = (path) => {
-    navigate(path);
-  };
-
   return (
-
-    
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
       <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
@@ -177,20 +177,51 @@ const LibrarianDashboard = () => {
         sx={{ flexGrow: 1, bgcolor: 'background.default', p: 3 }}
       >
         <Toolbar />
-        <Typography variant="h4" gutterBottom>
+        <Typography
+          variant="h4"
+          gutterBottom
+          sx={{
+            fontWeight: 'bold',
+            fontSize: '2.5rem',
+            color: '#2196f3',
+            textShadow: '2px 2px 5px rgba(0, 0, 255, 0.3)',
+            marginBottom: '20px',
+          }}
+        >
           Books
         </Typography>
-        <div style={{ height: 400, width: '100%' }}>
-          <DataGrid rows={books} columns={[
-            { field: 'id', headerName: 'ID', width: 150 },
-            { field: 'name', headerName: 'Name', width: 300 },
-            { field: 'author', headerName: 'Author', width: 300 },
-            { field: 'category', headerName: 'Category', width: 300 },
-            { field: 'action', headerName: 'Action', width: 150, renderCell: (params) => (
-              <Button variant="contained" color="primary" size="small">Edit</Button>
-            ) }
-          ]} pageSize={5} />
-        </div>
+        <Grid container spacing={3}>
+          {books.map((book) => (
+            <Grid item xs={12} sm={6} md={4} key={book.id}>
+              <Card sx={{ maxWidth: 345 }}>
+                <CardMedia
+                  component="img"
+                  height="140"
+                  image={book.photo}
+                />
+                <CardContent>
+                  <Typography variant="h6" component="div" sx={{
+                  fontWeight: 'bold',
+                  fontSize: '1 rem', }}>
+                  {book.title}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    isbn: {book.isbn}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Author: {book.author}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Category: {book.category}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Quantity: {book.quantity}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
       </Box>
     </Box>
   );
