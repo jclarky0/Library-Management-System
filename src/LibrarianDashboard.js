@@ -183,8 +183,8 @@ const LibrarianDashboard = () => {
           sx={{
             fontWeight: 'bold',
             fontSize: '2.5rem',
-            color: '#2196f3',
-            textShadow: '2px 2px 5px rgba(0, 0, 255, 0.3)',
+            color: '#00000',
+            
             marginBottom: '20px',
           }}
         >

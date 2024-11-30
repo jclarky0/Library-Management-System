@@ -1,15 +1,24 @@
 package libraryManagement.librarybackend.controller;
 
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import libraryManagement.librarybackend.dto.LoginRequest;
 import libraryManagement.librarybackend.dto.LoginResponse;
 import libraryManagement.librarybackend.entity.User;
 import libraryManagement.librarybackend.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -181,5 +190,17 @@ public class UserController {
     public ResponseEntity<List<User>> getPendingUnrestrictRequests() {
         List<User> pendingUnrestrictRequests = userService.getPendingUnrestrictRequests();
         return ResponseEntity.ok(pendingUnrestrictRequests);
+        
+  
+  }
+  @GetMapping("/{username}")
+public ResponseEntity<User> getUserByUsername(@PathVariable String username) {
+    Optional<User> userOptional = userService.getUserByUsername(username);
+    
+    if (userOptional.isPresent()) {
+        return ResponseEntity.ok(userOptional.get()); // User found, return 200 OK with user data
+    } else {
+        return ResponseEntity.notFound().build(); // User not found, return 404 Not Found
     }
+}
 }

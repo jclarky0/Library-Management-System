@@ -1,16 +1,17 @@
 package libraryManagement.librarybackend.service;
 
-import libraryManagement.librarybackend.entity.User;
-import libraryManagement.librarybackend.entity.PasswordResetToken;
-import libraryManagement.librarybackend.repository.UserRepository;
-import libraryManagement.librarybackend.repository.PasswordResetTokenRepository;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import libraryManagement.librarybackend.entity.PasswordResetToken;
+import libraryManagement.librarybackend.entity.User;
+import libraryManagement.librarybackend.repository.PasswordResetTokenRepository;
+import libraryManagement.librarybackend.repository.UserRepository;
 
 @Service
 public class UserService {
@@ -127,6 +128,9 @@ public class UserService {
 
     public List<User> getPendingUnrestrictRequests() {
         return userRepository.findByStatus("PENDING_UNRESTRICT");
+    }
+    public Optional<User> getUserByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
 
 }

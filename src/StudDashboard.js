@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
@@ -27,7 +27,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import axios from 'axios';
- 
+
 const StudDashboard = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [username, setUsername] = useState('');
@@ -38,142 +38,116 @@ const StudDashboard = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedBook, setSelectedBook] = useState(null);
   const navigate = useNavigate();
- 
+  const location = useLocation();
+
+  const user = location.state?.username || localStorage.getItem('username');
+
   useEffect(() => {
     const storedEmail = localStorage.getItem('email');
     const storedUsername = localStorage.getItem('username');
-    if (storedEmail) {
-      setEmail(storedEmail);
-    }
-    if (storedUsername) {
-      setUsername(storedUsername);
-    }
+    if (storedEmail) setEmail(storedEmail);
+    if (storedUsername) setUsername(storedUsername);
     fetchBooks();
   }, []);
- 
+
   const fetchBooks = async () => {
     try {
       const response = await axios.get('http://localhost:8080/api/books');
-      console.log('Fetched books:', response.data);
       setBooks(response.data);
     } catch (error) {
       console.error('Error fetching books:', error);
     }
   };
- 
-  const handleMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
- 
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
- 
+
+  const handleMenuOpen = (event) => setAnchorEl(event.currentTarget);
+  const handleMenuClose = () => setAnchorEl(null);
+
   const handleLogout = () => {
     localStorage.removeItem('email');
     localStorage.removeItem('username');
     navigate('/');
   };
- 
+
   const handleCategoryClick = (category) => {
     setSelectedCategory(category);
     setSearchQuery('');
   };
- 
+
   const handleBorrowClick = (book) => {
     setSelectedBook(book);
     setDialogOpen(true);
   };
- 
+
   const handleDialogClose = () => {
     setDialogOpen(false);
     setSelectedBook(null);
   };
- 
+
   const handleConfirmBorrow = async () => {
     const username = localStorage.getItem('username');
     if (!username) {
       alert('No username found in localStorage. Please log in first.');
       return;
     }
- 
     try {
-      const borrowRequest = {
-        bookTitle: selectedBook.title,
-        status: 'Pending'
-      };
- 
-      await axios.post(`http://localhost:8080/book-requests/request-borrow?username=${username}`, borrowRequest);
+      const borrowRequest = { bookTitle: selectedBook.title, status: 'Pending' };
+      await axios.post(
+        `http://localhost:8080/book-requests/request-borrow?username=${username}`,
+        borrowRequest
+      );
       alert('Borrow request sent successfully!');
-      setDialogOpen(false);
-      setSelectedBook(null);
+      handleDialogClose();
     } catch (error) {
       console.error('Error sending borrow request:', error);
       alert('Failed to send borrow request.');
     }
   };
- 
+
   const filteredBooks = books.filter((book) =>
     (selectedCategory === 'All' || book.category === selectedCategory) &&
     book.title?.toLowerCase().includes(searchQuery.toLowerCase())
   );
- 
+
   return (
-    <Box
-      sx={{
-        height: '100vh',
-        display: 'flex',
-        flexDirection: 'column',
-      }}
-    >
+    <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
       <AppBar>
         <Toolbar style={{ backgroundColor: '87CEFA', minHeight: 50 }}>
-          <div style={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
-              <Typography variant="h6" component="div" sx={{ fontWeight: 'bold', color: 'white' }}>
-                Library Management System
-              </Typography>
-          </div>
- 
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <Typography variant="body1" component="div" sx={{ color: 'white', marginRight: 2 }}>
-              {email}
-            </Typography>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              color="inherit"
-              onClick={handleMenuOpen}
-            >
-              <AccountCircle />
-            </IconButton>
-            <Menu
-              anchorEl={anchorEl}
-              open={Boolean(anchorEl)}
-              onClose={handleMenuClose}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'right',
-              }}
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-            >
-              <MenuItem onClick={() => navigate('/personalinfo')}>Personal Information</MenuItem>
-              <MenuItem onClick={() => navigate('/BorrowList')}>Borrowed Book</MenuItem>
-              <MenuItem onClick={handleLogout}>Logout</MenuItem>
-            </Menu>
-          </div>
+          <Typography variant="h6" component="div" sx={{ fontWeight: 'bold', color: 'white', flexGrow: 1 }}>
+            Library Management System
+          </Typography>
+          <Typography variant="body1" sx={{ color: 'white', marginRight: 2 }}>
+            {user}
+          </Typography>
+          <IconButton onClick={handleMenuOpen} color="inherit">
+            <AccountCircle />
+          </IconButton>
+          <Menu
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={handleMenuClose}
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+            transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+          >
+            <MenuItem onClick={() => navigate('/personalinfo')}>Personal Information</MenuItem>
+            <MenuItem onClick={() => navigate('/BorrowList')}>Borrowed Books</MenuItem>
+            <MenuItem onClick={handleLogout}>Logout</MenuItem>
+          </Menu>
         </Toolbar>
       </AppBar>
       <Box sx={{ display: 'flex', justifyContent: 'center', padding: 2, marginTop: 8 }}>
-        <Button variant="outlined" sx={{ margin: 1 }} onClick={() => handleCategoryClick('All')}><BookIcon/>All Books</Button>
-        <Button variant="outlined" sx={{ margin: 1 }} onClick={() => handleCategoryClick('Nursing')}><LocalHospitalIcon/>Nursing</Button>
-        <Button variant="outlined" sx={{ margin: 1 }} onClick={() => handleCategoryClick('IT')}><ComputerIcon/> IT</Button>
-        <Button variant="outlined" sx={{ margin: 1 }} onClick={() => handleCategoryClick('Civil Engineering')}><ConstructionTwoToneIcon/>Civil Engineer</Button>
-        <Button variant="outlined" sx={{ margin: 1 }} onClick={() => handleCategoryClick('Electrical Engineering')}><ElectricBoltTwoToneIcon/>Electrical Engineering</Button>
-        <Button variant="outlined" sx={{ margin: 1 }} onClick={() => handleCategoryClick('Business Administration')}><BusinessCenterTwoToneIcon/>Business Administration</Button>
-        <Button variant="outlined" sx={{ margin: 1 }} onClick={() => handleCategoryClick('Others')}><MiscellaneousServicesIcon/>Others</Button>
+        {/* Category Buttons */}
+        {['All', 'Nursing', 'IT', 'Civil Engineering', 'Electrical Engineering', 'Business Administration', 'Others'].map(
+          (category, index) => (
+            <Button
+              key={index}
+              variant="outlined"
+              sx={{ margin: 1 }}
+              onClick={() => handleCategoryClick(category)}
+            >
+              {category}
+            </Button>
+          )
+        )}
       </Box>
       <Box sx={{ display: 'flex', justifyContent: 'center', padding: 2 }}>
         <TextField
@@ -184,36 +158,29 @@ const StudDashboard = () => {
           sx={{ width: '50%' }}
         />
       </Box>
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexGrow: 1, flexWrap: 'wrap', gap: 2, padding: 2 }}>
+      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, padding: 2, justifyContent: 'center' }}>
         {filteredBooks.map((book, index) => (
           <Card key={index} sx={{ maxWidth: 345 }}>
             <CardMedia
               component="img"
               alt={book.title}
               height="140"
-              image={book.photo ? `data:image/jpeg;base64,${book.photo}` : 'placeholder-image-url'} // Provide a placeholder image URL
+              image={book.photo ? `data:image/jpeg;base64,${book.photo}` : 'placeholder-image-url'}
               title={book.title}
             />
             <CardContent>
-              <Typography gutterBottom variant="h5" component="div">
-                {book.title}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                Author: {book.author}
-              </Typography>
+              <Typography variant="h5">{book.title}</Typography>
+              <Typography color="text.secondary">Author: {book.author}</Typography>
             </CardContent>
             <CardActions>
-              <Button size="small" variant="contained" color="primary" onClick={() => handleBorrowClick(book)}>
+              <Button variant="contained" onClick={() => handleBorrowClick(book)}>
                 Borrow now!
               </Button>
             </CardActions>
           </Card>
         ))}
       </Box>
-      <Dialog
-        open={dialogOpen}
-        onClose={handleDialogClose}
-      >
+      <Dialog open={dialogOpen} onClose={handleDialogClose}>
         <DialogTitle>Borrow Book</DialogTitle>
         <DialogContent>
           <DialogContentText>
@@ -221,10 +188,10 @@ const StudDashboard = () => {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleConfirmBorrow} color="primary" variant="contained">
+          <Button onClick={handleConfirmBorrow} variant="contained">
             Confirm
           </Button>
-          <Button onClick={handleDialogClose} color="primary" variant="outlined">
+          <Button onClick={handleDialogClose} variant="outlined">
             Cancel
           </Button>
         </DialogActions>
@@ -232,5 +199,5 @@ const StudDashboard = () => {
     </Box>
   );
 };
- 
+
 export default StudDashboard;

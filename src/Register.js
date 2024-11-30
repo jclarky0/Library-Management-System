@@ -68,25 +68,28 @@ const Register = () => {
 
   return (
     <Box
-      sx={{
-        backgroundImage: `url(${backgroundImage})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-        backgroundAttachment: 'fixed',
-        height: '100vh',
-        width: '100vw',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        overflow: 'hidden',
-      }}
-    >
+    sx={{
+      position: 'fixed',        
+      top: 0,                    
+      left: 0,                   
+      right: 0,                  
+      bottom: 0,                
+      backgroundImage: `url(${backgroundImage})`,
+      backgroundSize: 'cover',   
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat',
+      height: '100vh',           
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      overflow: 'hidden',        
+    }}
+  >
       <Paper
         elevation={6}
         sx={{
           padding: 2,
-          width: '400px',
+          width: '375px',
           backdropFilter: 'blur(10px)',
           backgroundColor: 'rgba(255, 255, 255, 0.8)',
         }}

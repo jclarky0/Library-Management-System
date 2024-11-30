@@ -5,26 +5,66 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 
+// UserInfo component for fetching and displaying user details
+const UserInfo = ({ user }) => {
+  const [userInfo, setUserInfo] = useState(null);
+  const [error, setError] = useState(null);
+
+  const fetchUserInfo = async () => {
+    try {
+      const response = await axios.get(`http://localhost:8080/users/${user}`);
+      setUserInfo(response.data);
+    } catch (error) {
+      if (error.response) {
+        if (error.response.status === 404) {
+          setError('User not found');
+        } else if (error.response.status === 401) {
+          setError('Unauthorized access');
+        } else {
+          setError('An error occurred while fetching user data');
+        }
+      } else if (error.request) {
+        setError('No response from the server');
+      } else {
+        setError('An error occurred');
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (user) fetchUserInfo();
+  }, [user]);
+
+  if (error) {
+    return <Typography variant="body1" sx={{ color: 'red', fontSize: '0.875rem' }}>{error}</Typography>;
+  }
+
+  if (!userInfo) {
+    return <Typography variant="body1" sx={{ fontSize: '0.875rem' }}>Loading...</Typography>;
+  }
+
+  return (
+    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <Typography variant="body1" sx={{ marginBottom: 1, fontSize: '0.875rem' }}>
+        <strong>Username:</strong> {userInfo.username}
+      </Typography>
+      <Typography variant="body1" sx={{ marginBottom: 1, fontSize: '0.875rem' }}>
+        <strong>Email:</strong> {userInfo.email}
+      </Typography>
+      <Typography variant="body1" sx={{ marginBottom: 1, fontSize: '0.875rem' }}>
+        <strong>Password:</strong> ********
+      </Typography>
+      <Button size="small" sx={{ marginLeft: 1, fontSize: '0.7rem' }}>Change Password</Button>
+    </Box>
+  );
+};
+
 const PersonalInfo = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [anchorEl, setAnchorEl] = useState(null);
-  const [userInfo, setUserInfo] = useState({});
-  const username = location.state?.username || localStorage.getItem('username') || 'Guest';
 
-  useEffect(() => {
-    // Fetch user information based on username
-    const fetchUserInfo = async () => {
-      try {
-        const response = await axios.get(`/users/${username}`);
-        setUserInfo(response.data);
-      } catch (error) {
-        console.error('Error fetching user info:', error);
-      }
-    };
-
-    fetchUserInfo();
-  }, [username]);
+  const username = location.state?.username || localStorage.getItem('username');
 
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -35,11 +75,7 @@ const PersonalInfo = () => {
   };
 
   const handleBackClick = () => {
-    navigate(-1); // Go back to the previous page
-  };
-
-  const handleChangePasswordClick = () => {
-    navigate('/changepassword'); // Navigate to change password page
+    navigate(-1);
   };
 
   const handleLogout = () => {
@@ -48,16 +84,10 @@ const PersonalInfo = () => {
   };
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: '100vh',
-        backgroundColor: '#f0f0f0',
-      }}
-    >
+    <Box sx={{
+      display: 'flex', flexDirection: 'column', alignItems: 'center',
+      justifyContent: 'center', height: '100vh', backgroundColor: '#f0f0f0',
+    }}>
       <AppBar sx={{ backgroundColor: '#2196f3' }}>
         <Toolbar>
           <IconButton edge="start" color="inherit" onClick={handleBackClick} aria-label="back">
@@ -66,60 +96,26 @@ const PersonalInfo = () => {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Library Management System
           </Typography>
-          <Typography variant="body1" component="div" sx={{ color: 'white', marginRight: 2 }}>
+          <Typography variant="body1" sx={{ color: 'white', marginRight: 2 }}>
             {username}
           </Typography>
-          <IconButton
-            size="large"
-            aria-label="account of current user"
-            color="inherit"
-            onClick={handleMenuOpen}
-          >
+          <IconButton size="large" color="inherit" onClick={handleMenuOpen}>
             <AccountCircle />
           </IconButton>
-          <Menu
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
-            onClose={handleMenuClose}
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'right',
-            }}
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-          >
+          <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
             <MenuItem onClick={handleMenuClose}>Personal Information</MenuItem>
-            <MenuItem onClick={() => navigate('/borrowlist')}>Borrowed Book</MenuItem>
+            <MenuItem onClick={() => navigate('/borrowlist')}>Borrowed Books</MenuItem>
             <MenuItem onClick={handleLogout}>Logout</MenuItem>
           </Menu>
         </Toolbar>
       </AppBar>
-      <Paper elevation={3} sx={{ padding: 4, marginTop: 4, maxWidth: 300, height: 380, width: '100%', textAlign: 'center' }}>
-        <Avatar alt={userInfo.username} src="/static/images/avatar/1.jpg" sx={{ width: 80, height: 80, margin: 'auto' }} />
-        <Typography variant="h5" component="div" sx={{ marginTop: 2, marginBottom: 2, fontWeight: 'bold' }}>
+      <Paper elevation={3} sx={{ padding: 4, marginTop: 4, maxWidth: 300, height: 380 }}>
+        <Typography variant="h5" sx={{ fontWeight: 'bold', marginBottom: 2 }}>
           Personal Information
         </Typography>
-        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          <Typography variant="body1" component="div" sx={{ marginBottom: 1, fontSize: '0.875rem' }}>
-            <strong>Username:</strong> {userInfo.username}
-          </Typography>
-          <Typography variant="body1" component="div" sx={{ marginBottom: 1, fontSize: '0.875rem' }}>
-            <strong>First Name:</strong> {userInfo.firstname}
-          </Typography>
-          <Typography variant="body1" component="div" sx={{ marginBottom: 1, fontSize: '0.875rem' }}>
-            <strong>Last Name:</strong> {userInfo.lastname}
-          </Typography>
-          <Typography variant="body1" component="div" sx={{ marginBottom: 1, fontSize: '0.875rem' }}>
-            <strong>Email:</strong> {userInfo.email}
-          </Typography>
-          <Typography variant="body1" component="div" sx={{ marginBottom: 1, fontSize: '0.875rem' }}>
-            <strong>Password:</strong> **************
-            <Button size="small" sx={{ marginLeft: 1, fontSize: '0.7rem' }} onClick={handleChangePasswordClick}>Change Password</Button>
-          </Typography>
-        </Box>
-        <Button variant="contained" color="primary" onClick={handleBackClick} sx={{ marginTop: 5 }}>
+        <Avatar alt={username} src="/static/images/avatar/1.jpg" sx={{ width: 80, height: 80, marginBottom: 2 , margin:'auto', marginBottom: 4  }} />
+        <UserInfo user={username} />
+        <Button variant="contained" color="primary" onClick={handleBackClick} sx={{ marginTop: 5, marginLeft: 10 }}>
           Back
         </Button>
       </Paper>

@@ -13,10 +13,9 @@ const UserInfo = ({ user }) => {
   const fetchUserInfo = async () => {
     try {
       const response = await axios.get(`http://localhost:8080/users/${user}`);
-      setUserInfo(response.data);
+      setUserInfo(response.data); // Semicolon fixed here
     } catch (error) {
       if (error.response) {
-        // Server responded with an error
         if (error.response.status === 404) {
           setError('User not found');
         } else if (error.response.status === 401) {
@@ -25,11 +24,9 @@ const UserInfo = ({ user }) => {
           setError('An error occurred while fetching user data');
         }
       } else if (error.request) {
-        // No response from the server
         setError('No response from the server');
       } else {
-        // Other errors
-        setError('An error occurred');
+        setError('An unexpected error occurred');
       }
     }
   };
@@ -48,16 +45,16 @@ const UserInfo = ({ user }) => {
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-      <Typography variant="body1" sx={{ marginBottom: 1, fontSize: '0.875rem'}}>
+      <Typography variant="body1" sx={{ marginBottom: 1, fontSize: '0.875rem' }}>
         <strong>Username:</strong> {userInfo.username}
       </Typography>
       <Typography variant="body1" sx={{ marginBottom: 1, fontSize: '0.875rem' }}>
         <strong>Email:</strong> {userInfo.email}
       </Typography>
       <Typography variant="body1" sx={{ marginBottom: 1, fontSize: '0.875rem' }}>
-        <strong>Password:</strong> 
-        <Button size="small" sx={{ marginLeft: 1, fontSize: '0.7rem' }}>Change Password</Button>
+        <strong>Password:</strong> *********
       </Typography>
+      <Button size="small" sx={{ marginLeft: 1, fontSize: '0.7rem' }}>Change Password</Button>
     </Box>
   );
 };
@@ -70,23 +67,9 @@ const LibrarianPersonalInfo = () => {
   // Use username from state or localStorage
   const username = location.state?.username || localStorage.getItem('username');
 
-  // Menu handler functions
-  const handleMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleBackClick = () => {
-    navigate(-1);
-  };
-
-  const handleChangePasswordClick = () => {
-    navigate('/LibChangePassword');
-  };
-
+  const handleMenuOpen = (event) => setAnchorEl(event.currentTarget);
+  const handleMenuClose = () => setAnchorEl(null);
+  const handleBackClick = () => navigate(-1);
   const handleLogout = () => {
     localStorage.removeItem('username');
     navigate('/');
@@ -108,32 +91,21 @@ const LibrarianPersonalInfo = () => {
           <IconButton edge="start" color="inherit" onClick={handleBackClick} aria-label="back">
             <ArrowBackIcon />
           </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          <Typography variant="h6" sx={{ flexGrow: 1 }}>
             Library Management System
           </Typography>
-          <Typography variant="body1" component="div" sx={{ color: 'white', marginRight: 2 }}>
+          <Typography variant="body1" sx={{ color: 'white', marginRight: 2 }}>
             {username}
           </Typography>
-          <IconButton
-            size="large"
-            aria-label="account of current user"
-            color="inherit"
-            onClick={handleMenuOpen}
-          >
+          <IconButton size="large" color="inherit" onClick={handleMenuOpen}>
             <AccountCircle />
           </IconButton>
           <Menu
             anchorEl={anchorEl}
             open={Boolean(anchorEl)}
             onClose={handleMenuClose}
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'right',
-            }}
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+            transformOrigin={{ vertical: 'top', horizontal: 'right' }}
           >
             <MenuItem onClick={handleMenuClose}>Personal Information</MenuItem>
             <MenuItem onClick={() => navigate('/borrowlist')}>Borrowed Book</MenuItem>

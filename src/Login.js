@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Box, TextField, Typography, Button, Link, Paper } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios'; // Make sure to import axios
+import axios from 'axios';
 import backgroundImage from './images/BG.jpg'; // Adjust the path if necessary
 
 const Login = () => {
@@ -22,8 +22,7 @@ const Login = () => {
       const { role } = response.data;
 
       console.log('User logged in:', response);
-
-      localStorage.setItem('username', username); // Set username in localStorage
+      localStorage.setItem('username', username); // Store username in localStorage
 
       if (role === 2) {
         navigate('/LibrarianDashboard', { state: { username } });
@@ -40,14 +39,27 @@ const Login = () => {
     }
   };
 
+  React.useEffect(() => {
+    // Prevent scrolling when component is mounted
+    document.body.style.overflow = 'hidden';
+    return () => {
+      // Reset overflow when component unmounts
+      document.body.style.overflow = 'auto';
+    };
+  }, []);
+
   return (
     <Box
       sx={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
         backgroundImage: `url(${backgroundImage})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
-        backgroundAttachment: 'fixed',
         height: '100vh',
         width: '100vw',
         display: 'flex',
@@ -60,8 +72,8 @@ const Login = () => {
         elevation={6}
         sx={{
           padding: 2,
-          width: '300px',
-          height: '350px',
+          width: '350px',
+          height: '345px',
           backdropFilter: 'blur(10px)',
           backgroundColor: 'rgba(255, 255, 255, 0.8)',
         }}
