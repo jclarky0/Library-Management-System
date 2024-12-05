@@ -30,8 +30,6 @@ import axios from 'axios';
 
 const StudDashboard = () => {
   const [anchorEl, setAnchorEl] = useState(null);
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [books, setBooks] = useState([]);
@@ -43,10 +41,7 @@ const StudDashboard = () => {
   const user = location.state?.username || localStorage.getItem('username');
 
   useEffect(() => {
-    const storedEmail = localStorage.getItem('email');
-    const storedUsername = localStorage.getItem('username');
-    if (storedEmail) setEmail(storedEmail);
-    if (storedUsername) setUsername(storedUsername);
+    
     fetchBooks();
   }, []);
 
@@ -56,6 +51,7 @@ const StudDashboard = () => {
       setBooks(response.data);
     } catch (error) {
       console.error('Error fetching books:', error);
+      
     }
   };
 
@@ -109,7 +105,7 @@ const StudDashboard = () => {
   );
 
   return (
-    <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <Box sx={{  display: 'flex', flexDirection: 'column' }}>
       <AppBar>
         <Toolbar style={{ backgroundColor: '87CEFA', minHeight: 50 }}>
           <Typography variant="h6" component="div" sx={{ fontWeight: 'bold', color: 'white', flexGrow: 1 }}>
@@ -158,14 +154,27 @@ const StudDashboard = () => {
           sx={{ width: '50%' }}
         />
       </Box>
-      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, padding: 2, justifyContent: 'center' }}>
+      <Box sx={{ display: 'flex', gap: 5, padding: 5, justifyContent: 'center' }}>
         {filteredBooks.map((book, index) => (
-          <Card key={index} sx={{ maxWidth: 345 }}>
+          <Card
+          sx={{
+          maxWidth: 250,
+          maxHeight: 400,
+          border: '1px solid #ddd',
+          borderRadius: '8px',
+          boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+          transition: 'transform 0.2s',
+          '&:hover': {
+          transform: 'scale(1.05)',
+           },
+          }}
+          >
             <CardMedia
               component="img"
               alt={book.title}
               height="140"
               image={book.photo ? `data:image/jpeg;base64,${book.photo}` : 'placeholder-image-url'}
+              sx={{ objectFit: 'fill' }}
               title={book.title}
             />
             <CardContent>
