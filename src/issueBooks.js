@@ -45,6 +45,11 @@ const IssueBooks = () => {
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
+
+  const handleLogout = () => {
+    localStorage.removeItem('username');
+    navigate('/');
+  };
  
   const handleBackClick = () => {
     navigate(-1); // Go back to the previous page
@@ -91,7 +96,7 @@ const IssueBooks = () => {
             onClose={handleMenuClose}
           >
             <MenuItem onClick={handlePersonalInfoClick}>Personal Information</MenuItem>
-            <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
+            <MenuItem onClick={handleLogout}>Logout</MenuItem>
           </Menu>
         </Toolbar>
       </AppBar>

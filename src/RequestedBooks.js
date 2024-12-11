@@ -82,6 +82,11 @@ const RequestedBooks = () => {
     setAnchorEl(null);
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('username');
+    navigate('/');
+  };
+
   const handlePersonalInfoClick = () => {
     navigate('/LibrarianPersonalInfo'); // Navigate to PersonalInfo page
   };
@@ -110,7 +115,7 @@ const RequestedBooks = () => {
             onClose={handleMenuClose}
           >
             <MenuItem onClick={handlePersonalInfoClick}>Personal Information</MenuItem>
-            <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
+            <MenuItem onClick={handleLogout}>Logout</MenuItem>
           </Menu>
         </Toolbar>
       </AppBar>

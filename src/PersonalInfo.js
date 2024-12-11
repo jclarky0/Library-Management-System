@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Typography, Box, AppBar, Toolbar, IconButton, Button, Avatar, Paper, Menu, MenuItem } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import AccountCircle from '@mui/icons-material/AccountCircle';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import axios from 'axios';
 
 // UserInfo component for fetching and displaying user details
@@ -54,7 +54,7 @@ const UserInfo = ({ user }) => {
       <Typography variant="body1" sx={{ marginBottom: 1, fontSize: '0.875rem' }}>
         <strong>Password:</strong> ********
       </Typography>
-      <Button size="small" sx={{ marginLeft: 1, fontSize: '0.7rem' }}>Change Password</Button>
+      <Button component={Link} to="/ChangePassword" size="small" sx={{ marginLeft: 1, fontSize: '0.7rem' }} variant="contained">Change Password</Button>
     </Box>
   );
 };

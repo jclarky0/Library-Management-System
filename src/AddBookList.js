@@ -252,7 +252,7 @@ const AddBookList = () => {
             boxSizing: 'border-box',
             overflowX: 'hidden',
           },
-          '&:hover .MuiDrawer-paper': {
+          '& .MuiDrawer-paper': {
             width: drawerWidth,
           },
         }}
